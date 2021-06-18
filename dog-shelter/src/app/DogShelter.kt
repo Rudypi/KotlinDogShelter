@@ -10,9 +10,11 @@ class DogShelter {
     private lateinit var cages: Array<Boolean>
     private lateinit var dogColor: Array<String>
     private lateinit var dogName: Array<String>
+    private lateinit var dogBreed: Array<String>
     private lateinit var dogAlimentation: Array<String>
+    private lateinit var dogSex: Array<String>
     private val colors = mutableSetOf<String>("Brown", "Black", "White", "Merle", "Grey", "Red", "Gold", "Blue", "Cream")
-    private val breed = mutableSetOf<String>("Akita", "Alaskan malamute", "Australian shepherd", "Bassethound", "Beagle", "Border Collie", "Bulldog",
+    private val breeds = mutableSetOf<String>("Akita", "Alaskan malamute", "Australian shepherd", "Bassethound", "Beagle", "Border Collie", "Bulldog",
             "Cocker", "Dalmatian", "Husky")
 
     fun service(command: Array<String>) {
@@ -24,15 +26,17 @@ class DogShelter {
         } else {
             when (command[0]) {
                 "create" -> if (isNull(command)) errorBounds() else reset(command[1])
-                "register" -> if (isNull(command, 1, 2)) errorBounds() else register(command[2], command[1], command[3], command[4])
+                "register" -> if (isNull(command, 1, 2)) errorBounds() else register(command[2], command[1], command[3], command[4], command[5])
                 "leave" -> if (isNull(command)) errorBounds() else leave(command[1])
                 "status" -> info(0, "")
                 "reg_by_color" -> if (isNull(command)) errorBounds() else info(1, command[1])
                 "spot_by_color" -> if (isNull(command)) errorBounds() else info(2, command[1])
                 "spot_by_reg" -> if (isNull(command)) errorBounds() else info(3, command[1])
-                "spot_by_alimentation" -> if (isNull(command)) errorBounds() else info(4, command[1])
+                "reg_by_alimentation" -> if (isNull(command)) errorBounds() else info(4, command[1])
+                "reg_by_sex" -> if (isNull(command)) errorBounds() else info(5, command[1])
+                "reg_by_breed" -> if (isNull(command)) errorBounds() else info(6, command[1])
                 "print_known_colors" -> println(colors)
-                "print_known_colors" -> println(breed) //last 2 used to test that mutable collections works
+                "print_known_colors" -> println(breeds) //last 2 used to test that mutable collections works
                 "help" -> help()
             }
         }
@@ -43,12 +47,14 @@ class DogShelter {
             cages = Array(number.toInt()) { true }
             dogColor = Array(number.toInt()) { "" }
             dogName = Array(number.toInt()) { "" }
+            dogBreed = Array(number.toInt()) { "" }
             dogAlimentation = Array(number.toInt()) { "" }
+            dogSex = Array(number.toInt()) { "" }
             println("Created a shelter with $number free cages.")
         } else errorNumber(number)
     }
 
-    private fun register(color: String, id: String, dogBreed: String, alimentation: String) {
+    private fun register(color: String, id: String, breed: String, alimentation: String, sex: String) {
         for (index in cages.indices) {
             if (!cages[index]) {
                 if (dogName[index] == id) {
@@ -64,10 +70,12 @@ class DogShelter {
                 dogColor[index] = color
                 dogName[index] = id
                 dogAlimentation[index] = alimentation
-                if(!colors.contains(dogColor)) colors.add(dogColor[index])
-                if(!breed.contains(dogBreed)) breed.add(dogBreed)
+                dogBreed[index] = breed
+                dogSex[index] = sex
                 return
             }
+            if(!colors.contains(color)) colors.also { println("Dog color not referenced, adding it to the list") }.add(color)
+            if(!breeds.contains(breed)) breeds.also { println("Dog breed not referenced, adding it to the list") }.add(breed)
         }
         println("Sorry, all cages are occupied.")
     }
@@ -83,7 +91,7 @@ class DogShelter {
         } else errorNumber(number)
     }
 
-    // find: 0 = status, 1 = reg_by_color, 2 = spot_by_color, 3 = spot_by_reg
+    // find: 0 = status, 1 = reg_by_color, 2 = spot_by_color, 3 = spot_by_reg, 4 = spot_by_alimentation, 5 = spot_by_sex
     private fun info(find: Int, search: String) {
         var results = ""
 
@@ -95,6 +103,9 @@ class DogShelter {
                     2 -> if (dogColor[index].toLowerCase() == search.toLowerCase()) results += "${index + 1} "
                     3 -> if (dogName[index] == search) results += "${index + 1}"
                     4 -> if (dogAlimentation[index] == search) results += "${dogName[index]} "
+                    5 -> if (dogSex[index] == search) results += "${dogName[index]} "
+                    6 -> if (dogBreed[index] == search) results += "${dogName[index]} "
+
                 }
             }
         }
@@ -103,7 +114,9 @@ class DogShelter {
                     when (find) {
                         0 -> "Cage is empty."
                         in 1..2 -> "No dogs with color $search were found."
-                        else -> "No dogs with registration Name $search were found."
+                        3 -> "No dogs with registration Name $search were found."
+                        4 -> "No dogs feeding with $search were found."
+                        else -> "No $search dogs were found." // for dog sex and breed
                     }
             )
         } else println(
@@ -115,7 +128,7 @@ class DogShelter {
         println(
                 """
             register - Registers your dog. Please enter a unique Name, color (add number for multiple same names), breed and Alimentation.
-                Example: "register Skywalker White Husky Croquettes"
+                Example: "register Skywalker White Husky Croquettes Male"
             leave - removes a registered dog from a cage.
                 Example: "leave 2"
             status - shows cages number, dog Name and color of any used cages
@@ -125,8 +138,12 @@ class DogShelter {
                 Example: "spot_by_color merle"
             spot_by_reg - returns the cage number of the dog based on its registration name
                 Example: "spot_by_reg Diane"
-            spot_by_alimentation - returns the dog names based on their alimentation
+            reg_by_alimentation - returns the dog names based on their alimentation
                 Example: "spot_by_alimentation croquettes"
+            reg_by_sex - returns the dog names based on their sex
+                Example: "spot_by_sex female"
+            reg_by_breed - returns the dog names based on their breed
+                Example: "spot_by_breed husky"
             create - creates a new shelter according to size received and erases previous one
                 Example: "create 20" 
             "print_known_colors" - print all the known dog colors
