@@ -69,7 +69,7 @@ class DogShelter {
                 return
             }
         }
-        println("Sorry, all cages rae occupied.")
+        println("Sorry, all cages are occupied.")
     }
 
     private fun leave(number: String) {

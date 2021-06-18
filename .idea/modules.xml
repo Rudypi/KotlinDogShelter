@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/KotlinDogShelter.iml" filepath="$PROJECT_DIR$/KotlinDogShelter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dog-shelter/dog-shelter.iml" filepath="$PROJECT_DIR$/dog-shelter/dog-shelter.iml" />
+    </modules>
+  </component>
+</project>
