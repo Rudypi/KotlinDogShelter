@@ -8,7 +8,7 @@ import utility.*
 
 fun main() {
     val myShelter = DogShelter()
-    val dog = Dog("Skywalker", "White/Black", "Husky", "Croquettes")
+    val dog = Dog("Skywalker", "White/Black", "Husky", "Croquettes", "Male")
     val create = "Please enter the number of places available in the shelter: "
     val commandText = "Please enter a command (help - for a list): "
     var command = arrayOf("create", getNum(create).toString())

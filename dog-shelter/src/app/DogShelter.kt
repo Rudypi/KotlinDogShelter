@@ -26,7 +26,7 @@ class DogShelter {
         } else {
             when (command[0]) {
                 "create" -> if (isNull(command)) errorBounds() else reset(command[1])
-                "register" -> if (isNull(command, 1, 2)) errorBounds() else register(command[2], command[1], command[3], command[4], command[5])
+                "register" -> if (isNull(command, 4, 5)) errorBounds() else register(command[2], command[1], command[3], command[4], command[5])
                 "leave" -> if (isNull(command)) errorBounds() else leave(command[1])
                 "status" -> info(0, "")
                 "reg_by_color" -> if (isNull(command)) errorBounds() else info(1, command[1])
@@ -91,7 +91,7 @@ class DogShelter {
         } else errorNumber(number)
     }
 
-    // find: 0 = status, 1 = reg_by_color, 2 = spot_by_color, 3 = spot_by_reg, 4 = spot_by_alimentation, 5 = spot_by_sex
+    // find: 0 = status, 1 = reg_by_color, 2 = spot_by_color, 3 = spot_by_reg, 4 = spot_by_alimentation, 5 = spot_by_sex, 6 = spot_by_breed
     private fun info(find: Int, search: String) {
         var results = ""
 

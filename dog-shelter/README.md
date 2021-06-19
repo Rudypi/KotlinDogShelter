@@ -1,6 +1,7 @@
 # Dog Shelter app
 
-Creates a dog shelter with as many cages as specified by the user, and allows the user to add, remove and list dogs already there.
+Creates a dog shelter with as many cages as specified by the user, and allows the user to add, remove and list dogs already there.  
+Usage: run the app, give a number of available cages and then start using commands below.
 
 ## Usage
 
